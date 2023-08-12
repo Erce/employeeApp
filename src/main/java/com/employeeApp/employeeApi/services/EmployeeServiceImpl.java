@@ -1,9 +1,11 @@
 package com.employeeApp.employeeApi.services;
 
-import com.employeeApp.employeeApi.domain.Employee;
+import com.employeeApp.employeeApi.entity.Employee;
 import com.employeeApp.employeeApi.repositories.EmployeeRepository;
+import com.employeeApp.employeeApi.kafka.EmployeeEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.kafka.core.KafkaTemplate;
 
 import java.util.List;
 import java.util.UUID;
@@ -13,10 +15,21 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
+    @Autowired
+    private KafkaTemplate<String, EmployeeEvent> kafkaTemplate;
+
     @Override
     public Employee createEmployee(Employee employee) {
         employee.setId(UUID.randomUUID());
-        return employeeRepository.save(employee);
+        Employee createdEmployee = employeeRepository.save(employee);
+
+        // Create event and send
+        EmployeeEvent employeeEvent = new EmployeeEvent();
+        employeeEvent.setEmployeeId(employee.getId());
+        employeeEvent.setEventType("EmployeeCreated");
+        kafkaTemplate.send("employee-events", employeeEvent);
+
+        return createdEmployee;
     }
 
     @Override

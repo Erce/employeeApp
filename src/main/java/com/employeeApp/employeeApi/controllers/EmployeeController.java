@@ -1,6 +1,6 @@
 package com.employeeApp.employeeApi.controllers;
 
-import com.employeeApp.employeeApi.domain.Employee;
+import com.employeeApp.employeeApi.entity.Employee;
 import com.employeeApp.employeeApi.services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

@@ -1,6 +1,6 @@
 package com.employeeApp.employeeApi.services;
 
-import com.employeeApp.employeeApi.domain.Employee;
+import com.employeeApp.employeeApi.entity.Employee;
 
 import java.util.List;
 import java.util.UUID;

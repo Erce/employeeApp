@@ -1,6 +1,6 @@
 package com.employeeApp.employeeApi.repositories;
 
-import com.employeeApp.employeeApi.domain.Employee;
+import com.employeeApp.employeeApi.entity.Employee;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.UUID;

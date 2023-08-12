@@ -5,9 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
-
 @SpringBootApplication(exclude={DataSourceAutoConfiguration.class})
-@EnableMongoRepositories("com.employeeApp.employeeApi")
+@EnableMongoRepositories
 public class EmployeeApiApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(EmployeeApiApplication.class, args);
