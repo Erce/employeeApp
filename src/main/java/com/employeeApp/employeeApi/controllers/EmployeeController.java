@@ -1,7 +1,7 @@
 package com.employeeApp.employeeApi.controllers;
 
 import com.employeeApp.employeeApi.domain.Employee;
-import com.employeeApp.employeeApi.repositories.EmployeeRepository;
+import com.employeeApp.employeeApi.services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,21 +11,26 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/employees")
 public class EmployeeController {
-    private final EmployeeRepository employeeRepository;
+    private final EmployeeService employeeService;
 
     @Autowired
-    public EmployeeController(EmployeeRepository employeeRepository) {
-        this.employeeRepository = employeeRepository;
+    public EmployeeController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
     }
 
     @PostMapping
     public Employee createEmployee(@RequestBody Employee employee) {
         employee.setId(UUID.randomUUID());
-        return employeeRepository.save(employee);
+        return employeeService.createEmployee(employee);
+    }
+
+    @GetMapping("/{id}")
+    public Employee getEmployee(@PathVariable UUID id) {
+        return employeeService.getEmployee(id);
     }
 
     @GetMapping
     public List<Employee> getAllEmployees() {
-        return employeeRepository.findAll();
+        return employeeService.getAllEmployees();
     }
 }

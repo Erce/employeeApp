@@ -20,6 +20,8 @@ public class Employee {
     private String birthday;
     private List<String> hobbies;
 
+    public Employee() {}
+
     public Employee(
             String fullName,
             String email
