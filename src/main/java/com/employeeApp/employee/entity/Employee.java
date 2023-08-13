@@ -1,4 +1,4 @@
-package com.employeeApp.employeeApi.entity;
+package com.employeeApp.employee.entity;
 
 import lombok.Data;
 import jakarta.persistence.GeneratedValue;

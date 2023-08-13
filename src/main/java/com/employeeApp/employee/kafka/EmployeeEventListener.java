@@ -1,4 +1,4 @@
-package com.employeeApp.employeeApi.kafka;
+package com.employeeApp.employee.kafka;
 
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;

@@ -1,6 +1,6 @@
-package com.employeeApp.employeeApi.services;
+package com.employeeApp.employee.services;
 
-import com.employeeApp.employeeApi.controllers.dto.EmployeeDTO;
+import com.employeeApp.employee.controllers.dto.EmployeeDTO;
 
 import java.util.List;
 import java.util.UUID;

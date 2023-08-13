@@ -1,9 +1,9 @@
-package com.employeeApp.employeeApi.services;
+package com.employeeApp.employee.services;
 
-import com.employeeApp.employeeApi.controllers.dto.EmployeeDTO;
-import com.employeeApp.employeeApi.entity.Employee;
-import com.employeeApp.employeeApi.kafka.EmployeeEvent;
-import com.employeeApp.employeeApi.repositories.dao.EmployeeDAO;
+import com.employeeApp.employee.controllers.dto.EmployeeDTO;
+import com.employeeApp.employee.entity.Employee;
+import com.employeeApp.employee.kafka.EmployeeEvent;
+import com.employeeApp.employee.repositories.dao.employee.EmployeeDAO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
