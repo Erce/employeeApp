@@ -2,8 +2,8 @@ package com.employeeApp.employeeApi.services;
 
 import com.employeeApp.employeeApi.controllers.dto.EmployeeDTO;
 import com.employeeApp.employeeApi.entity.Employee;
-import com.employeeApp.employeeApi.repositories.EmployeeRepository;
 import com.employeeApp.employeeApi.kafka.EmployeeEvent;
+import com.employeeApp.employeeApi.repositories.dao.EmployeeDAO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,8 +16,7 @@ import java.util.stream.Collectors;
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
-    private EmployeeRepository employeeRepository;
-
+    private EmployeeDAO employeeDAO;
     @Autowired
     private KafkaTemplate<String, EmployeeEvent> kafkaTemplate;
 
@@ -26,7 +25,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = new Employee();
         BeanUtils.copyProperties(employeeDTO, employee);
         employee.setId(UUID.randomUUID());
-        employeeRepository.save(employee);
+        Employee createdEmployee = employeeDAO.saveEmployee(employee);
+        employeeDTO.setId(createdEmployee.getId());
 
         // Create event and send
         EmployeeEvent employeeEvent = new EmployeeEvent();
@@ -39,19 +39,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeDTO getEmployee(UUID id) {
-        Employee employee = employeeRepository.findById(id).orElse(null);
-        if (employee != null) {
-            EmployeeDTO employeeDTO = new EmployeeDTO();
-            BeanUtils.copyProperties(employee, employeeDTO);
-            return employeeDTO;
-        }
-        return null;
-    }
-
-    @Override
     public List<EmployeeDTO> getAllEmployees() {
-        List<Employee> employees = employeeRepository.findAll();
+        List<Employee> employees = employeeDAO.findAllEmployees();
         return employees.stream()
                 .map(employee -> {
                     EmployeeDTO employeeDTO = new EmployeeDTO();
@@ -62,18 +51,44 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    public EmployeeDTO getEmployee(UUID id) {
+        Employee employee = employeeDAO.findEmployeeById(id);
+        if (employee != null) {
+            EmployeeDTO employeeDTO = new EmployeeDTO();
+            BeanUtils.copyProperties(employee, employeeDTO);
+            return employeeDTO;
+        }
+        return null;
+    }
+
+    @Override
     public void deleteEmployee(UUID id) {
-        employeeRepository.deleteById(id);
+        employeeDAO.deleteEmployee(id);
+
+        // Create event and send
+        EmployeeEvent employeeEvent = new EmployeeEvent();
+        employeeEvent.setEmployeeId(id);
+        employeeEvent.setEventType("EmployeeDeleted");
+
+        kafkaTemplate.send("employee-events", employeeEvent);
     }
 
     @Override
     public EmployeeDTO updateEmployee(UUID id, EmployeeDTO employeeDTO) {
-        Employee employee = employeeRepository.findById(id).orElse(null);
+        Employee employee = employeeDAO.findEmployeeById(id);
 
         if(employee != null) {
             BeanUtils.copyProperties(employeeDTO, employee);
             employee.setId(id);
-            employeeRepository.save(employee);
+            employeeDAO.saveEmployee(employee);
+            employeeDTO.setId(id);
+
+            // Create event and send
+            EmployeeEvent employeeEvent = new EmployeeEvent();
+            employeeEvent.setEmployeeId(id);
+            employeeEvent.setEventType("EmployeeUpdated");
+
+            kafkaTemplate.send("employee-events", employeeEvent);
 
             return employeeDTO;
         }

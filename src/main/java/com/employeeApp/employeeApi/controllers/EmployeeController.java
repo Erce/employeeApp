@@ -2,6 +2,7 @@ package com.employeeApp.employeeApi.controllers;
 
 import com.employeeApp.employeeApi.controllers.dto.EmployeeDTO;
 import com.employeeApp.employeeApi.services.EmployeeService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,7 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public EmployeeDTO createEmployee(@RequestBody EmployeeDTO employeeDTO) {
+    public EmployeeDTO createEmployee(@Valid @RequestBody EmployeeDTO employeeDTO) {
         return employeeService.createEmployee(employeeDTO);
     }
 
@@ -39,7 +40,7 @@ public class EmployeeController {
     }
 
     @PutMapping("/{id}")
-    public EmployeeDTO updateEmployee(@PathVariable UUID id, @RequestBody EmployeeDTO employeeDTO) {
+    public EmployeeDTO updateEmployee(@PathVariable UUID id,@Valid @RequestBody EmployeeDTO employeeDTO) {
         return employeeService.updateEmployee(id, employeeDTO);
     }
 }
