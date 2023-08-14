@@ -1,19 +1,22 @@
 version: '3.7'
 services:
-#  employee-app:
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
-#    container_name: employee-app
-#    restart: always
-#    ports:
-#      - "8080:8080"
-#    depends_on:
-#      - mongodb
-#      - kafka
-#    environment:
-#      SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/employeeDB
-#      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+  employee-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: employee-app
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongodb
+      - kafka
+      - zookeeper
+    environment:
+      - spring.data.mongodb.uri=mongodb://mongodb:27017/employeeDB
+      - spring.kafka.producer.bootstrap-servers=kafka:9092
+      - spring.kafka.consumer.bootstrap-servers=kafka:9092
+#      - spring.kafka.bootstrap-servers=localhost:29092
 
   mongodb:
     image: mongo:latest
@@ -28,49 +31,48 @@ services:
       - mongodb_data:/data/db
 
   zookeeper:
-    image: confluentinc/cp-zookeeper:latest
-#    restart: always
-    container_name: zookeeper
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
+    image: docker.io/bitnami/zookeeper:3.7
+    restart: always
     ports:
-      - "22181:2181"
+      - "2181:2181"
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    volumes:
+      - "zookeeper_data:/bitnami"
 
   kafka:
-    image: confluentinc/cp-kafka:latest
-#    restart: always
-    hostname: kafka
-    container_name: kafka
-    depends_on:
-      - zookeeper
+    image: docker.io/bitnami/kafka:3
     ports:
-#      - "9092:9092"
+      - "9092:9092"
       - "29092:29092"
     environment:
-#      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
-#      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092
-#      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-
-#  kafka-2:
-#    image: confluentinc/cp-kafka:latest
-#    depends_on:
-#      - zookeeper-1
-#      - zookeeper-2
+      - KAFKA_BROKER_ID=1
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=CLIENT://:9092,EXTERNAL://:29092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka:9092,EXTERNAL://localhost:29092
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=CLIENT
+    depends_on:
+      - zookeeper
+#  kafka2:
+#    image: docker.io/bitnami/kafka:3
 #    ports:
-#      - 39092:39092
+#      - "39093:39093"
+#      - "9093:9093"
 #    environment:
-#      KAFKA_BROKER_ID: 2
-#      KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:2181,zookeeper-2:2181
-#      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-2:9092,PLAINTEXT_HOST://localhost:39092
-#      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-#      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-#      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+#      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+#      - ALLOW_PLAINTEXT_LISTENER=yes
+#      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT
+#      - KAFKA_CFG_LISTENERS=CLIENT://:9093,EXTERNAL://:39093
+#      - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka2:9093,EXTERNAL://localhost:39093
+#      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=CLIENT
+#    depends_on:
+#      - zookeeper
 
 volumes:
   mongodb_data:
+  zookeeper_data:
+    driver: local
+  kafka_data:
+    driver: local
