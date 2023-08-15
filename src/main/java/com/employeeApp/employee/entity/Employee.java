@@ -1,5 +1,6 @@
 package com.employeeApp.employee.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Data
+@AllArgsConstructor
 @Document(collection = "employee")
 public class Employee {
     @Id
@@ -21,4 +23,6 @@ public class Employee {
     private String fullName;
     private String birthday;
     private List<String> hobbies;
+
+    public Employee() {}
 }
