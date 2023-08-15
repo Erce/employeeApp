@@ -5,6 +5,7 @@ import lombok.Data;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -13,6 +14,7 @@ import java.util.UUID;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Document(collection = "employee")
 public class Employee {
     @Id
@@ -23,6 +25,4 @@ public class Employee {
     private String fullName;
     private String birthday;
     private List<String> hobbies;
-
-    public Employee() {}
 }
