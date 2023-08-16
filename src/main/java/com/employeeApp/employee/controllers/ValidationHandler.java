@@ -3,6 +3,7 @@ package com.employeeApp.employee.controllers;
 import com.employeeApp.employee.exception.EmployeeAlreadyExistsException;
 import com.employeeApp.employee.exception.ErrorResponse;
 import com.employeeApp.employee.exception.NoEmployeeExistsException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -18,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @ControllerAdvice
+@Slf4j
 public class ValidationHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
@@ -34,6 +36,7 @@ public class ValidationHandler extends ResponseEntityExceptionHandler {
             errors.put(fieldName, message);
         });
 
+        log.error(errors.toString());
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
@@ -46,6 +49,7 @@ public class ValidationHandler extends ResponseEntityExceptionHandler {
                 exception.getMessage()
         );
 
+        log.error(errorResponse.toString());
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
@@ -58,6 +62,7 @@ public class ValidationHandler extends ResponseEntityExceptionHandler {
                 exception.getMessage()
         );
 
+        log.error(errorResponse.toString());
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 }
