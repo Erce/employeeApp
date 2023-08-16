@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.employeeApp.employee.controllers.dto.EmployeeDTO;
 import com.employeeApp.employee.entity.Employee;
+import com.employeeApp.employee.kafka.EmployeeEvent;
 import com.employeeApp.employee.repositories.dao.employee.EmployeeDAOImpl;
 import com.employeeApp.employee.services.EmployeeServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.kafka.core.KafkaTemplate;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,6 +22,9 @@ public class EmployeeServiceTest {
 
     @InjectMocks
     private EmployeeServiceImpl employeeService;
+
+    @Mock
+    private KafkaTemplate<String, EmployeeEvent> kafkaTemplate;
 
     @Mock
     private EmployeeDAOImpl employeeDAO;
