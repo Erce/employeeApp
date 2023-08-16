@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
+@RequestMapping("/employees")
 public class EmployeeController {
     private final EmployeeService employeeService;
     @Autowired
@@ -27,7 +28,7 @@ public class EmployeeController {
         );
     }
 
-    @RequestMapping(value = "/employees/{id}", method = RequestMethod.GET)
+    @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<EmployeeDTO> getEmployee(@PathVariable UUID id) {
         return ResponseEntity.status(HttpStatus.OK).body(
@@ -35,7 +36,7 @@ public class EmployeeController {
         );
     }
 
-    @RequestMapping(value = "/employees", method = RequestMethod.GET)
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<EmployeeDTO>> getAllEmployees() {
         return ResponseEntity.status(HttpStatus.OK).body(
@@ -43,13 +44,13 @@ public class EmployeeController {
         );
     }
 
-    @RequestMapping(value = "/employees/{id}", method = RequestMethod.DELETE)
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteEmployee(@PathVariable UUID id) {
         employeeService.deleteEmployee(id);
     }
 
-    @RequestMapping(value = "/employees/{id}", method = RequestMethod.PUT)
+    @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<EmployeeDTO> updateEmployee(@PathVariable UUID id,@Valid @RequestBody EmployeeDTO employeeDTO) {
         return ResponseEntity.status(HttpStatus.OK).body(
