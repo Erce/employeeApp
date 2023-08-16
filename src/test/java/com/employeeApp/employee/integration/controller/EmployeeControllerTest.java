@@ -1,5 +1,6 @@
 package com.employeeApp.employee.integration.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.mockito.Mockito.*;
@@ -7,7 +8,6 @@ import static org.mockito.Mockito.*;
 import com.employeeApp.employee.controllers.EmployeeController;
 import com.employeeApp.employee.controllers.dto.EmployeeDTO;
 import com.employeeApp.employee.services.EmployeeService;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +19,7 @@ import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -66,10 +67,6 @@ public class EmployeeControllerTest {
         );
     }
 
-    @AfterEach
-    public void tearDown() {
-    }
-
     @Test
     public void shouldCreateEmployee() throws Exception {
         // Define the behavior of the mocked EmployeeService
@@ -77,15 +74,14 @@ public class EmployeeControllerTest {
         when(employeeService.createEmployee(any(EmployeeDTO.class))).thenReturn(mockedEmployee1);
 
         // Perform the HTTP request and assertions
-        mockMvc.perform(post("/employees")
+        MvcResult mvcResult = mockMvc.perform(post("/employees")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonBody))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(mockedEmployee1.getId().toString()))
-                .andExpect(jsonPath("$.fullName").value(mockedEmployee1.getFullName()))
-                .andExpect(jsonPath("$.email").value(mockedEmployee1.getEmail()))
-                .andExpect(jsonPath("$.birthday").value(mockedEmployee1.getBirthday()))
-                .andExpect(jsonPath("$.hobbies[0]").value(mockedEmployee1.getHobbies().get(0)));
+                .andReturn();
+
+        String actualResponseBody = mvcResult.getResponse().getContentAsString();
+        assertThat(actualResponseBody).isEqualToIgnoringWhitespace(jsonBody);
     }
 
     @Test
@@ -97,15 +93,14 @@ public class EmployeeControllerTest {
         String jsonBody = objectMapper.writeValueAsString(mockedEmployee1);
 
         // Perform the HTTP request and assertions
-        mockMvc.perform(put("/employees/{id}", mockedEmployee1.getId())
+        MvcResult mvcResult = mockMvc.perform(put("/employees/{id}", mockedEmployee1.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonBody))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(mockedEmployee1.getId().toString()))
-                .andExpect(jsonPath("$.fullName").value(mockedEmployee1.getFullName()))
-                .andExpect(jsonPath("$.email").value(mockedEmployee1.getEmail()))
-                .andExpect(jsonPath("$.birthday").value(mockedEmployee1.getBirthday()))
-                .andExpect(jsonPath("$.hobbies[0]").value(mockedEmployee1.getHobbies().get(0)));
+                .andReturn();
+
+        String actualResponseBody = mvcResult.getResponse().getContentAsString();
+        assertThat(actualResponseBody).isEqualToIgnoringWhitespace(jsonBody);
     }
 
     @Test
@@ -129,13 +124,12 @@ public class EmployeeControllerTest {
         when(employeeService.getEmployee(mockedEmployee1.getId())).thenReturn(mockedEmployee1);
 
         // Perform the HTTP request and assertions
-        mockMvc.perform(get("/employees/{id}", mockedEmployee1.getId()))
+        MvcResult mvcResult = mockMvc.perform(get("/employees/{id}", mockedEmployee1.getId()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(mockedEmployee1.getId().toString()))
-                .andExpect(jsonPath("$.fullName").value(mockedEmployee1.getFullName()))
-                .andExpect(jsonPath("$.email").value(mockedEmployee1.getEmail()))
-                .andExpect(jsonPath("$.birthday").value(mockedEmployee1.getBirthday()))
-                .andExpect(jsonPath("$.hobbies[0]").value(mockedEmployee1.getHobbies().get(0)));
+                .andReturn();
+
+        String actualResponseBody = mvcResult.getResponse().getContentAsString();
+        assertThat(actualResponseBody).isEqualToIgnoringWhitespace(objectMapper.writeValueAsString(mockedEmployee1));
     }
 
     @Test
