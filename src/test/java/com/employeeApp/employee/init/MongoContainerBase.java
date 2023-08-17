@@ -14,6 +14,7 @@ public class MongoContainerBase {
     @Container
     private static final MongoDBContainer mongoDBContainer =
             new MongoDBContainer(DockerImageName.parse("mongo:latest"));
+
     @DynamicPropertySource
     static void mongoDbProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.data.mongodb.host", mongoDBContainer::getHost);

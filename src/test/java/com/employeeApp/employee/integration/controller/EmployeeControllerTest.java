@@ -39,11 +39,9 @@ public class EmployeeControllerTest {
     private ObjectMapper objectMapper;
     private EmployeeDTO mockedEmployee1, mockedEmployee2;
 
-    private EmployeeController employeeController;
-
     @BeforeEach
     public void setUp() {
-        employeeController = new EmployeeController(employeeService);
+        EmployeeController employeeController = new EmployeeController(employeeService);
         mockMvc = MockMvcBuilders.standaloneSetup(employeeController).build();
 
         // Mock API_KEY authentication
@@ -52,16 +50,16 @@ public class EmployeeControllerTest {
 
         mockedEmployee1 = new EmployeeDTO(
                 UUID.randomUUID(),
-                "Erce Can Balcioglu",
                 "ercecanbalcioglu@gmail.com",
+                "Erce Can Balcioglu",
                 "1992-03-30",
                 Arrays.asList("gaming")
         );
 
         mockedEmployee2 = new EmployeeDTO(
                 UUID.randomUUID(),
-                "Test TEST",
                 "test@test.com",
+                "Test TEST",
                 "1949-01-14",
                 Arrays.asList("reading", "cycling")
         );

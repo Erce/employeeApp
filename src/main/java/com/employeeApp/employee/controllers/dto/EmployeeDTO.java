@@ -16,11 +16,11 @@ import java.util.UUID;
 public class EmployeeDTO {
     private UUID id;
     @NotEmpty
-    private String fullName;
-    @NotEmpty
     @NotNull
     @Email
     private String email;
+    @NotEmpty
+    private String fullName;
     private String birthday;
     private List<String> hobbies;
 }
