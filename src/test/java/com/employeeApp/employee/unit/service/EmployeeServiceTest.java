@@ -35,7 +35,7 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    public void testCreateEmployee() {
+    public void shouldCreateEmployee() {
         UUID employeeId = UUID.randomUUID();
         EmployeeDTO employeeDTO = new EmployeeDTO();
         employeeDTO.setId(employeeId);
@@ -56,7 +56,7 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    public void testGetEmployee() {
+    public void shouldGetEmployee() {
         UUID employeeId = UUID.randomUUID();
         Employee existingEmployee = new Employee();
         existingEmployee.setId(employeeId);
@@ -74,7 +74,7 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    public void testUpdateEmployee() {
+    public void shouldUpdateEmployee() {
         UUID employeeId = UUID.randomUUID();
         Employee existingEmployee = new Employee();
         existingEmployee.setId(employeeId);
@@ -97,7 +97,7 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    public void testDeleteEmployee() {
+    public void shouldDeleteEmployee() {
         UUID employeeId = UUID.randomUUID();
 
         employeeService.deleteEmployee(employeeId);
@@ -106,7 +106,7 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    public void testGetAllEmployees() {
+    public void shouldGetAllEmployees() {
         Employee employee1 = new Employee();
         Employee employee2 = new Employee();
         employee1.setFullName("Test Employee 1");
