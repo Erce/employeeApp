@@ -18,14 +18,14 @@ The service also uses Kafka for event handling.
 
 ### Prerequisites
 
-- Java Development Kit (JDK) 11 or higher
+- Java Development Kit (JDK) 17 or higher
 - Apache Maven (for building and managing dependencies)
 - Docker (for running MongoDB and Kafka in containers)
 
 ### Installation
 
 1. Clone this repository
-2. Run  ` mvnw clean package -DskipTests ` to create a package to run 
+2. Run  ` mvn clean package -DskipTests ` to create a package to run 
 in a docker container
 3. Run `docker-compose up --build` to start a docker container composing
 the Employee Service package, MongoDB instance and Apache Kafka
@@ -56,4 +56,4 @@ Example request body:
 ![img.png](src/main/resources/static/img/requestbody.png)
 
 ### Testing
-To run the tests `mvnw test`
+To run the tests `mvn test`
