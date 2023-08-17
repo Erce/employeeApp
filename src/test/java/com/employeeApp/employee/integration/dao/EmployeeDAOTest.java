@@ -14,6 +14,8 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -35,7 +37,7 @@ public class EmployeeDAOTest extends MongoContainerBase {
                 employeeId,
                 "ercecanbalcioglu@gmail.com",
                 "Erce Can Balcioglu",
-                "1992-03-30",
+                LocalDate.parse("1992-03-30", DateTimeFormatter.ISO_DATE),
                 Arrays.asList("gym", "gaming")
         );
         createdEmployee = employeeDAO.saveEmployee(employee);
@@ -56,7 +58,7 @@ public class EmployeeDAOTest extends MongoContainerBase {
                 employeeId,
                 "test@test.com",
                 "Test TEST",
-                "1981-05-22",
+                LocalDate.parse("1992-03-30", DateTimeFormatter.ISO_DATE),
                 Arrays.asList("tennis", "basketball", "swimming")
         );
         Employee createdEmployee = employeeDAO.saveEmployee(employee);
@@ -70,7 +72,7 @@ public class EmployeeDAOTest extends MongoContainerBase {
                 employeeId,
                 "ercecanbalcioglu@gmail.com",
                 "Erce Can Balcioglu",
-                "1992-03-30",
+                LocalDate.parse("1992-03-30", DateTimeFormatter.ISO_DATE),
                 Arrays.asList("gym", "gaming")
         );
         assertThrows(EmployeeAlreadyExistsException.class, () -> employeeDAO.saveEmployee(employee));
@@ -95,7 +97,7 @@ public class EmployeeDAOTest extends MongoContainerBase {
                 employeeId,
                 "test2@test.com",
                 "Test2 TEST",
-                "1988-11-03",
+                LocalDate.parse("1992-03-30", DateTimeFormatter.ISO_DATE),
                 Arrays.asList("tennis", "basketball", "swimming")
         );
         Employee createdEmployee2 = employeeDAO.saveEmployee(employee);

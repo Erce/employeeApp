@@ -24,6 +24,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -52,7 +54,7 @@ public class EmployeeControllerTest {
                 UUID.randomUUID(),
                 "ercecanbalcioglu@gmail.com",
                 "Erce Can Balcioglu",
-                "1992-03-30",
+                LocalDate.parse("1992-03-30", DateTimeFormatter.ISO_DATE),
                 Arrays.asList("gaming")
         );
 
@@ -60,7 +62,7 @@ public class EmployeeControllerTest {
                 UUID.randomUUID(),
                 "test@test.com",
                 "Test TEST",
-                "1949-01-14",
+                LocalDate.parse("1992-03-30", DateTimeFormatter.ISO_DATE),
                 Arrays.asList("reading", "cycling")
         );
     }
