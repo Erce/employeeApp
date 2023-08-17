@@ -16,15 +16,11 @@ services:
       - spring.data.mongodb.uri=mongodb://mongodb:27017/employeeDB
       - spring.kafka.producer.bootstrap-servers=kafka:9092
       - spring.kafka.consumer.bootstrap-servers=kafka:9092
-#      - spring.kafka.bootstrap-servers=localhost:29092
 
   mongodb:
     image: mongo:latest
     restart: always
     container_name: mongodb
-    #    environment:
-    #      MONGO_INITDB_ROOT_USERNAME: root
-    #      MONGO_INITDB_ROOT_PASSWORD: rootpassword
     ports:
       - "27017:27017"
     volumes:
@@ -42,6 +38,7 @@ services:
 
   kafka:
     image: docker.io/bitnami/kafka:3
+    restart: always
     ports:
       - "9092:9092"
       - "29092:29092"
@@ -55,20 +52,6 @@ services:
       - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=CLIENT
     depends_on:
       - zookeeper
-#  kafka2:
-#    image: docker.io/bitnami/kafka:3
-#    ports:
-#      - "39093:39093"
-#      - "9093:9093"
-#    environment:
-#      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
-#      - ALLOW_PLAINTEXT_LISTENER=yes
-#      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT
-#      - KAFKA_CFG_LISTENERS=CLIENT://:9093,EXTERNAL://:39093
-#      - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka2:9093,EXTERNAL://localhost:39093
-#      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=CLIENT
-#    depends_on:
-#      - zookeeper
 
 volumes:
   mongodb_data:
